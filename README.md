@@ -1,40 +1,49 @@
-<<<<<<< HEAD
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# N-Queens Solver
 
-## Getting Started
+An interactive N-Queens solver built with **Next.js**. It compares two local-search algorithms, hill climbing and simulated annealing, with exhaustive backtracking search. The search runs in a Web Worker, so the UI stays responsive and you can watch the board update live.
 
-First, run the development server:
+**Live demo:** _https://n-queen-local-search-bpir-six.vercel.app/_
 
+![N-Queens solver demo](./demo.png)
+
+
+## Features
+
+- **Three solving modes**
+  - **Hill climbing**: steepest-ascent with random restarts.
+  - **Simulated annealing**: random neighbor moves, Metropolis acceptance, geometric cooling and restarts.
+  - **Exhaustive (all solutions)**: row-by-row backtracking that finds every solution.
+- Live board visualization with a configurable step delay
+- Statistics: runs attempted, neighbors evaluated, placements tried, solutions found, unique solutions
+- Browse the solutions that were found
+- Runs in a Web Worker (`public/nqueens.worker.js`), so the page doesn't freeze
+
+## Algorithms
+
+### Hill climbing
+Starts from a random board with one queen per column. It evaluates all neighbors (moving one queen within its column) and moves to the best one only if it strictly reduces conflicts. When it reaches a local optimum, it restarts from a new random board, up to the maximum number of attempts.
+
+### Simulated annealing
+Picks a random neighbor each step. It always accepts a move that doesn't increase conflicts. Otherwise it accepts with probability `exp(-Δ / T)`. The temperature decays as `T ← T × cooling` on every step. Each run is capped at 5000 moves, then restarts.
+
+| Parameter | Default | Meaning |
+|---|---|---|
+| Start temperature | 2 | Initial `T`. Higher values accept more bad moves. |
+| Cooling rate | 0.999 | Multiplier applied to `T` every step. |
+
+### Exhaustive search
+Backtracking that places one queen per row. It tracks used columns and both diagonals in O(1) arrays, so invalid partial boards are pruned immediately. It finds every solution (92 for N=8).
+
+## Tech stack
+
+- [Next.js](https://nextjs.org/) (App Router)
+- React
+- TypeScript
+- Web Workers
+
+## Getting started
 ```bash
+git clone https://github.com/MR-Abbasnejad/n-queen-local-search.git
+cd n-queen-local-search
+npm install
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
-
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
-
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
-
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
-
-## Learn More
-
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
-=======
-# n-queen-local-search
->>>>>>> e30e3c921ba41469d0db175246ae407567b830d2
